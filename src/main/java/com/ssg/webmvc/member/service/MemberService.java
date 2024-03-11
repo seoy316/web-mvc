@@ -59,6 +59,20 @@ public enum MemberService {
             log.info("회원 정보 수정 실패");
     }
 
+    public MemberDTO updateCheck(MemberDTO before, MemberDTO after) {
+        MemberDTO member = new MemberDTO();
+        if (after.getMpw().isEmpty())
+            member.setMpw(before.getMpw());
+        else
+            member.setMpw(after.getMpw());
+
+        if (after.getEmail().isEmpty())
+            member.setEmail(before.getEmail());
+        else
+            member.setEmail(after.getEmail());
+        return member;
+    }
+
     public MemberDTO getMember(String mid) throws Exception {
         MemberVO vo = memberDAO.selectOne(mid);
         return modelMapper.map(vo, MemberDTO.class);

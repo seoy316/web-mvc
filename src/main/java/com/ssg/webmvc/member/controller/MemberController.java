@@ -3,7 +3,6 @@ package com.ssg.webmvc.member.controller;
 import com.ssg.webmvc.member.dto.MemberDTO;
 import com.ssg.webmvc.member.service.MemberService;
 import lombok.extern.log4j.Log4j2;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -33,7 +32,7 @@ public class MemberController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String path = req.getPathInfo();
 
         switch (path) {
@@ -60,7 +59,7 @@ public class MemberController extends HttpServlet {
         req.getRequestDispatcher("/WEB-INF/member/memberForm.jsp").forward(req,resp);
     }
 
-    public void addMember(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void addMember(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         MemberDTO member = MemberDTO.builder()
                 .mid(req.getParameter("mid"))
                 .mpw(req.getParameter("mpw"))
@@ -76,7 +75,7 @@ public class MemberController extends HttpServlet {
         resp.sendRedirect("/member/listMembers.do");
     }
 
-    public void showMemberModForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void showMemberModForm(HttpServletRequest req, HttpServletResponse resp) {
         String mid = req.getParameter("mid");
 
         try {
@@ -89,14 +88,16 @@ public class MemberController extends HttpServlet {
         }
     }
 
-    public void updateMember(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        MemberDTO member = MemberDTO.builder()
+    public void updateMember(HttpServletRequest req, HttpServletResponse resp) {
+        MemberDTO after = MemberDTO.builder()
                 .mid(req.getParameter("mid"))
                 .mpw(req.getParameter("mpw"))
                 .email(req.getParameter("emali"))
                 .build();
 
         try {
+            MemberDTO before = memberService.getMember(after.getMid());
+            MemberDTO member = memberService.updateCheck(before, after);
             memberService.updateMember(member);
             resp.sendRedirect("/member/listMembers.do");
         } catch (Exception e) {

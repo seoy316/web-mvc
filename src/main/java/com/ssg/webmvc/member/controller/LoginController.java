@@ -2,7 +2,6 @@ package com.ssg.webmvc.member.controller;
 
 import com.ssg.webmvc.member.dto.MemberDTO;
 import com.ssg.webmvc.member.service.LoginService;
-import com.ssg.webmvc.member.service.MemberService;
 import lombok.extern.log4j.Log4j2;
 
 import javax.servlet.ServletException;
@@ -34,7 +33,7 @@ public class LoginController extends HttpServlet {
             HttpSession session = req.getSession();
 
             session.setAttribute("loginInfo", member);
-            resp.sendRedirect("/member/listmembers.do");
+            resp.sendRedirect("/member/listMembers.do");
         } catch (Exception e) {
             e.printStackTrace();
             resp.sendRedirect("/login");

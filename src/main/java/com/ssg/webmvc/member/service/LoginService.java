@@ -27,6 +27,7 @@ public enum LoginService {
             return null;
         }
 
+        log.info("로그인 성공");
         return modelMapper.map(vo, MemberDTO.class);
     }
 
